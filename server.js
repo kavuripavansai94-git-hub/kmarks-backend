@@ -16,6 +16,7 @@ const sessionNotesRoutes = require("./routes/sessionNotes");
 const progressRoutes = require("./routes/progress");
 const paymentsRoutes = require("./routes/payments");
 const announcementsRoutes = require("./routes/announcements");
+const plansRoutes = require("./routes/plans");
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api/session-notes", sessionNotesRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/announcements", announcementsRoutes);
+app.use("/api/plans", plansRoutes);
 
 // ─── Health check ────────────────────────────────────────────
 app.get("/", (_req, res) => {

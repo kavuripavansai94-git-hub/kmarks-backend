@@ -98,7 +98,7 @@ async function createPayment(req, res) {
  */
 async function updatePayment(req, res) {
   try {
-    const { status, paid_at } = req.body;
+    const { status, paid_at, paid_date } = req.body;
 
     if (!status) {
       return res.status(400).json({ error: "status is required." });
@@ -107,10 +107,10 @@ async function updatePayment(req, res) {
     const updatePayload = { status };
 
     // Auto-set paid_at when marking as completed
-    if (status === "completed" && !paid_at) {
+    if (status === "completed" && !paid_at && !paid_date) {
       updatePayload.paid_at = new Date().toISOString();
-    } else if (paid_at) {
-      updatePayload.paid_at = paid_at;
+    } else if (paid_at || paid_date) {
+      updatePayload.paid_at = paid_at || paid_date;
     }
 
     const { data, error } = await supabaseAdmin
