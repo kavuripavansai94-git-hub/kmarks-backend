@@ -20,7 +20,14 @@ const announcementsRoutes = require("./routes/announcements");
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────
-app.use(cors()); // Allow all origins (dev mode)
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://kmarks-gym-dashboard.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json()); // Parse JSON request bodies
 
 // ─── Routes ──────────────────────────────────────────────────
