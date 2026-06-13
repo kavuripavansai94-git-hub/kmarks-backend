@@ -18,6 +18,7 @@ const paymentsRoutes = require("./routes/payments");
 const announcementsRoutes = require("./routes/announcements");
 const plansRoutes = require("./routes/plans");
 const branchesRoutes = require("./routes/branches");
+const expensesRoutes = require("./routes/expenses");
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/payments", paymentsRoutes);
 app.use("/api/announcements", announcementsRoutes);
 app.use("/api/plans", plansRoutes);
 app.use("/api/branches", branchesRoutes);
+app.use("/api/expenses", expensesRoutes);
 
 // ─── Health check ────────────────────────────────────────────
 app.get("/", (_req, res) => {

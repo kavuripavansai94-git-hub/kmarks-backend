@@ -349,3 +349,26 @@ CREATE TABLE announcements (
 );
 
 CREATE INDEX idx_announcements_published ON announcements (published_at DESC);
+
+-- -------------------------------------------------------------
+-- 16. EXPENSES
+-- -------------------------------------------------------------
+
+CREATE TABLE expenses (
+  id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  branch_id      UUID REFERENCES branches(id) ON DELETE SET NULL,
+  category       TEXT NOT NULL DEFAULT 'Other',
+  description    TEXT NOT NULL,
+  amount         NUMERIC(10,2) NOT NULL,
+  status         TEXT NOT NULL DEFAULT 'PENDING',
+  due_date       DATE NOT NULL,
+  paid_date      DATE,
+  payment_method TEXT,
+  is_recurring   BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_expenses_branch ON expenses(branch_id);
+CREATE INDEX idx_expenses_status ON expenses(status);
+CREATE INDEX idx_expenses_due_date ON expenses(due_date);
