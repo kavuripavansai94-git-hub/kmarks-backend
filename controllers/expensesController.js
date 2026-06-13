@@ -1,4 +1,4 @@
-const { supabase } = require('../config/supabase');
+const { supabaseAdmin } = require('../config/supabase');
 
 // Helper to generate recurring expenses for the current month
 const checkAndGenerateRecurringExpenses = async () => {
@@ -8,7 +8,7 @@ const checkAndGenerateRecurringExpenses = async () => {
     const currentYear = today.getFullYear();
 
     // 1. Get all base recurring expenses (we consider the earliest instance of each recurring expense as the template)
-    const { data: recurringExpenses, error: recErr } = await supabase
+    const { data: recurringExpenses, error: recErr } = await supabaseAdmin
       .from('expenses')
       .select('*')
       .eq('is_recurring', true)
@@ -30,7 +30,7 @@ const checkAndGenerateRecurringExpenses = async () => {
     const startOfMonth = new Date(currentYear, currentMonth, 1).toISOString();
     const endOfMonth = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59).toISOString();
 
-    const { data: currentMonthExpenses, error: currErr } = await supabase
+    const { data: currentMonthExpenses, error: currErr } = await supabaseAdmin
       .from('expenses')
       .select('*')
       .gte('due_date', startOfMonth)
@@ -71,7 +71,7 @@ const checkAndGenerateRecurringExpenses = async () => {
     });
 
     if (newExpenses.length > 0) {
-      await supabase.from('expenses').insert(newExpenses);
+      await supabaseAdmin.from('expenses').insert(newExpenses);
     }
   } catch (err) {
     console.error('Error generating recurring expenses:', err);
@@ -83,7 +83,7 @@ exports.getAllExpenses = async (req, res) => {
     // Optionally trigger the recurring check (lazy evaluation)
     await checkAndGenerateRecurringExpenses();
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('expenses')
       .select(`
         *,
@@ -122,7 +122,7 @@ exports.createExpense = async (req, res) => {
       is_recurring: is_recurring || false
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('expenses')
       .insert([newExpense])
       .select()
@@ -155,7 +155,7 @@ exports.updateExpense = async (req, res) => {
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('expenses')
       .update(updatePayload)
       .eq('id', id)
@@ -175,7 +175,7 @@ exports.deleteExpense = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('expenses')
       .delete()
       .eq('id', id);
