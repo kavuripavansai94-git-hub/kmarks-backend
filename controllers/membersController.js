@@ -6,6 +6,7 @@ const MEMBER_SELECT = `
   id,
   user_id,
   plan_id,
+  branch_id,
   joined_at,
   membership_end,
   assigned_trainer_id,
@@ -105,7 +106,7 @@ async function getMemberById(req, res) {
  */
 async function createMember(req, res) {
   try {
-    const { name, email, phone, plan_id, trainer_id, join_date, expiry_date } =
+    const { name, email, phone, plan_id, trainer_id, branch_id, join_date, expiry_date } =
       req.body;
 
     if (!name || !email) {
@@ -143,6 +144,7 @@ async function createMember(req, res) {
         user_id: user.id,
         assigned_trainer_id: trainer_id || null,
         plan_id: plan_id || null,
+        branch_id: branch_id || null,
         joined_at: join_date || new Date().toISOString().split("T")[0],
         membership_end: expiry_date || null,
       })
@@ -193,6 +195,7 @@ async function updateMember(req, res) {
       medical_conditions,
       fitness_goal,
       plan_id,
+      branch_id,
     } = req.body;
 
     // Fetch current member to get user_id
@@ -210,6 +213,7 @@ async function updateMember(req, res) {
     const memberUpdate = {};
     if (trainer_id !== undefined) memberUpdate.assigned_trainer_id = trainer_id;
     if (plan_id !== undefined) memberUpdate.plan_id = plan_id;
+    if (branch_id !== undefined) memberUpdate.branch_id = branch_id;
     if (join_date !== undefined) memberUpdate.joined_at = join_date;
     if (expiry_date !== undefined) memberUpdate.membership_end = expiry_date;
     if (date_of_birth !== undefined) memberUpdate.date_of_birth = date_of_birth;

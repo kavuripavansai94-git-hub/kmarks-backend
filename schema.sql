@@ -43,6 +43,21 @@ CREATE INDEX idx_users_role  ON users (role);
 
 
 -- ─────────────────────────────────────────────────────────────
+--  1.5. BRANCHES
+-- ─────────────────────────────────────────────────────────────
+
+CREATE TABLE branches (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name        TEXT        NOT NULL,
+  location    TEXT,
+  manager_id  UUID        REFERENCES users(id) ON DELETE SET NULL,
+  status      TEXT        NOT NULL DEFAULT 'ACTIVE',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+
+-- ─────────────────────────────────────────────────────────────
 --  2. MEMBERS
 -- ─────────────────────────────────────────────────────────────
 
@@ -61,12 +76,14 @@ CREATE TABLE members (
   joined_at               DATE        NOT NULL DEFAULT CURRENT_DATE,
   membership_end          DATE,
   assigned_trainer_id     UUID REFERENCES users(id) ON DELETE SET NULL,
+  branch_id               UUID REFERENCES branches(id) ON DELETE SET NULL,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_members_user_id ON members (user_id);
 CREATE INDEX idx_members_trainer ON members (assigned_trainer_id);
+CREATE INDEX idx_members_branch  ON members (branch_id);
 
 
 -- ─────────────────────────────────────────────────────────────
@@ -84,11 +101,13 @@ CREATE TABLE trainers (
   available_to     TIME,
   max_clients      INTEGER     DEFAULT 20,
   per_session_fee  NUMERIC(10,2),
+  branch_id        UUID REFERENCES branches(id) ON DELETE SET NULL,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_trainers_user_id ON trainers (user_id);
+CREATE INDEX idx_trainers_branch  ON trainers (branch_id);
 
 
 -- ─────────────────────────────────────────────────────────────

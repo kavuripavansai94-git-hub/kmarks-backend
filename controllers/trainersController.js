@@ -5,6 +5,7 @@ const { supabaseAdmin } = require("../config/supabase");
 const TRAINER_SELECT = `
   id,
   user_id,
+  branch_id,
   specialization,
   experience_years,
   bio,
@@ -68,7 +69,7 @@ async function getTrainerById(req, res) {
  */
 async function createTrainer(req, res) {
   try {
-    const { name, email, phone, specialty, joined_date } = req.body;
+    const { name, email, phone, specialty, branch_id, joined_date } = req.body;
 
     if (!name || !email) {
       return res.status(400).json({ error: "Name and email are required." });
@@ -111,6 +112,7 @@ async function createTrainer(req, res) {
       .insert({
         user_id: user.id,
         specialization: specialty || null,
+        branch_id: branch_id || null,
       })
       .select()
       .single();
@@ -146,6 +148,7 @@ async function updateTrainer(req, res) {
       email,
       phone,
       specialty,
+      branch_id,
       experience_years,
       bio,
       certifications,
@@ -169,6 +172,7 @@ async function updateTrainer(req, res) {
     // Build trainer update payload
     const trainerUpdate = {};
     if (specialty !== undefined) trainerUpdate.specialization = specialty;
+    if (branch_id !== undefined) trainerUpdate.branch_id = branch_id;
     if (experience_years !== undefined) trainerUpdate.experience_years = experience_years;
     if (bio !== undefined) trainerUpdate.bio = bio;
     if (certifications !== undefined) trainerUpdate.certifications = certifications;
