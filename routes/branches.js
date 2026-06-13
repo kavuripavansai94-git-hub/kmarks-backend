@@ -1,9 +1,9 @@
 const express = require("express");
 const { getAllBranches } = require("../controllers/branchesController");
-const { requireAuth } = require("../middleware/authMiddleware");
+const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get("/", requireAuth, getAllBranches);
+router.get("/", authMiddleware, getAllBranches);
 
 module.exports = router;
