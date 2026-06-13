@@ -19,7 +19,7 @@ const announcementsRoutes = require("./routes/announcements");
 const plansRoutes = require("./routes/plans");
 const branchesRoutes = require("./routes/branches");
 const expensesRoutes = require("./routes/expenses");
-
+const leadsRoutes = require("./routes/leads");
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────
@@ -50,7 +50,7 @@ app.use("/api/announcements", announcementsRoutes);
 app.use("/api/plans", plansRoutes);
 app.use("/api/branches", branchesRoutes);
 app.use("/api/expenses", expensesRoutes);
-
+app.use("/api/leads", leadsRoutes);
 // ─── Health check ────────────────────────────────────────────
 app.get("/", (_req, res) => {
   res.json({ message: "K Mark's Gym API is running 🏋️" });

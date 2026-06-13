@@ -372,3 +372,22 @@ CREATE TABLE expenses (
 CREATE INDEX idx_expenses_branch ON expenses(branch_id);
 CREATE INDEX idx_expenses_status ON expenses(status);
 CREATE INDEX idx_expenses_due_date ON expenses(due_date);
+
+-- -------------------------------------------------------------
+-- 17. LEADS
+-- -------------------------------------------------------------
+
+CREATE TABLE leads (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  source TEXT DEFAULT 'Walk-in',
+  status TEXT DEFAULT 'New',
+  notes TEXT,
+  follow_up_date DATE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_leads_status ON leads (status);
+CREATE INDEX idx_leads_follow_up ON leads (follow_up_date);
