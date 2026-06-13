@@ -5,6 +5,7 @@ const { supabaseAdmin } = require("../config/supabase");
 const MEMBER_SELECT = `
   id,
   user_id,
+  plan_id,
   joined_at,
   membership_end,
   assigned_trainer_id,
@@ -141,6 +142,7 @@ async function createMember(req, res) {
       .insert({
         user_id: user.id,
         assigned_trainer_id: trainer_id || null,
+        plan_id: plan_id || null,
         joined_at: join_date || new Date().toISOString().split("T")[0],
         membership_end: expiry_date || null,
       })
@@ -190,6 +192,7 @@ async function updateMember(req, res) {
       emergency_contact_phone,
       medical_conditions,
       fitness_goal,
+      plan_id,
     } = req.body;
 
     // Fetch current member to get user_id
@@ -206,6 +209,7 @@ async function updateMember(req, res) {
     // Build member update payload (only include provided fields)
     const memberUpdate = {};
     if (trainer_id !== undefined) memberUpdate.assigned_trainer_id = trainer_id;
+    if (plan_id !== undefined) memberUpdate.plan_id = plan_id;
     if (join_date !== undefined) memberUpdate.joined_at = join_date;
     if (expiry_date !== undefined) memberUpdate.membership_end = expiry_date;
     if (date_of_birth !== undefined) memberUpdate.date_of_birth = date_of_birth;
