@@ -47,13 +47,17 @@ CREATE INDEX idx_users_role  ON users (role);
 -- ─────────────────────────────────────────────────────────────
 
 CREATE TABLE branches (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name        TEXT        NOT NULL,
-  location    TEXT,
-  manager_id  UUID        REFERENCES users(id) ON DELETE SET NULL,
-  status      TEXT        NOT NULL DEFAULT 'ACTIVE',
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name          TEXT        NOT NULL,
+  location      TEXT,
+  manager_id    UUID        REFERENCES users(id) ON DELETE SET NULL,
+  status        TEXT        NOT NULL DEFAULT 'ACTIVE',
+  max_capacity  INTEGER     DEFAULT 500,
+  contact_phone TEXT,
+  contact_email TEXT,
+  address       TEXT,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 
