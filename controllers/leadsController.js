@@ -43,7 +43,7 @@ exports.createLead = async (req, res) => {
 exports.updateLead = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, phone, source, status, notes, follow_up_date } = req.body;
+    const { name, phone, source, status, notes, follow_up_date, last_contacted_at } = req.body;
 
     const updatePayload = {
       name,
@@ -52,6 +52,7 @@ exports.updateLead = async (req, res) => {
       status,
       notes,
       follow_up_date,
+      last_contacted_at,
       updated_at: new Date().toISOString()
     };
 
