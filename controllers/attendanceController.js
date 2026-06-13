@@ -91,5 +91,34 @@ async function getAllAttendance(req, res) {
     res.status(500).json({ error: "Internal server error." });
   }
 }
+async function getWeeklyStats(req, res) {
+  try {
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
 
-module.exports = { getAttendance, markAttendance, getAllAttendance };
+    const { data, error } = await supabaseAdmin
+      .from("attendance")
+      .select("check_in")
+      .gte("check_in", sevenDaysAgo.toISOString());
+
+    if (error) throw error;
+
+    const counts = [0, 0, 0, 0, 0, 0, 0];
+
+    data.forEach(record => {
+      const date = new Date(record.check_in);
+      let dayIndex = date.getDay() - 1;
+      if (dayIndex === -1) dayIndex = 6;
+      counts[dayIndex]++;
+    });
+
+    res.json({ weeklyStats: counts });
+  } catch (err) {
+    console.error("GetWeeklyStats error:", err.message);
+    res.status(500).json({ error: "Internal server error." });
+  }
+}
+
+module.exports = { getAttendance, markAttendance, getAllAttendance, getWeeklyStats };

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAttendance, markAttendance, getAllAttendance } = require("../controllers/attendanceController");
+const { getAttendance, markAttendance, getAllAttendance, getWeeklyStats } = require("../controllers/attendanceController");
 const { authMiddleware } = require("../middleware/auth");
 const { roleCheck } = require("../middleware/role");
 
@@ -9,6 +9,9 @@ router.use(authMiddleware);
 
 // GET /api/attendance — admin or trainer gets all attendance
 router.get("/", roleCheck(["admin", "trainer"]), getAllAttendance);
+
+// GET /api/attendance/weekly-stats — gets last 7 days count
+router.get("/weekly-stats", roleCheck(["admin", "trainer"]), getWeeklyStats);
 
 // GET /api/attendance/:member_id — admin, trainer, or that member
 router.get("/:member_id", getAttendance);
