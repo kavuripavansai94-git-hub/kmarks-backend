@@ -1,4 +1,4 @@
-const supabase = require('../config/supabase');
+const { supabase } = require('../config/supabase');
 
 // Helper to generate recurring expenses for the current month
 const checkAndGenerateRecurringExpenses = async () => {
